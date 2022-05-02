@@ -44,7 +44,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         
         contactTable.translatesAutoresizingMaskIntoConstraints = false
-        contactTable.register(UITableViewCell.self, forCellReuseIdentifier: "MyCell")
+        contactTable.register(ContactCell.self, forCellReuseIdentifier: ContactCell.identifier)
         
         self.view.addSubview(contactTable)
         self.contactTable.delegate = self
@@ -62,16 +62,38 @@ class MainViewController: UIViewController {
     
 }
 
-extension MainViewController : UITableViewDataSource, UITableViewDelegate {
+extension MainViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         contacts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath)
+        var cell = tableView.dequeueReusableCell(withIdentifier: ContactCell.identifier, for: indexPath)
         configure(cell: &cell, for: indexPath)
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
 }
+
+extension MainViewController : UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let actionDelete = UIContextualAction(style: .destructive, title: "Delete") { _, _, _ in
+            self.contacts.remove(at: indexPath.row)
+            tableView.reloadData()
+        }
+        let actionEdit = UIContextualAction(style: .normal, title: "Edit") { _, _, _ in
+            
+        }
+        let actions = UISwipeActionsConfiguration(actions: [actionDelete, actionEdit])
+        
+        return actions
+    }
+    
+}
+

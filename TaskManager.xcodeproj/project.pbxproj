@@ -15,6 +15,7 @@
 		A31D3A1E281D40EE003D356D /* TaskTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31D3A1D281D40EE003D356D /* TaskTableViewController.swift */; };
 		A337CF46281FB82D00CF0ABC /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = A337CF45281FB82D00CF0ABC /* Contact.swift */; };
 		A337CF48281FCECF00CF0ABC /* ContactsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A337CF47281FCECF00CF0ABC /* ContactsTable.swift */; };
+		A337CF4C281FF5F100CF0ABC /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A337CF4B281FF5F100CF0ABC /* ContactCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		A31D3A1D281D40EE003D356D /* TaskTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewController.swift; sourceTree = "<group>"; };
 		A337CF45281FB82D00CF0ABC /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		A337CF47281FCECF00CF0ABC /* ContactsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTable.swift; sourceTree = "<group>"; };
+		A337CF4B281FF5F100CF0ABC /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 			children = (
 				A31D3A1D281D40EE003D356D /* TaskTableViewController.swift */,
 				A337CF47281FCECF00CF0ABC /* ContactsTable.swift */,
+				A337CF4B281FF5F100CF0ABC /* ContactCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A337CF4C281FF5F100CF0ABC /* ContactCell.swift in Sources */,
 				A337CF46281FB82D00CF0ABC /* Contact.swift in Sources */,
 				A31D3A1E281D40EE003D356D /* TaskTableViewController.swift in Sources */,
 				A31D3A01281D0E4B003D356D /* AppDelegate.swift in Sources */,
