@@ -16,6 +16,9 @@
 		A337CF46281FB82D00CF0ABC /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = A337CF45281FB82D00CF0ABC /* Contact.swift */; };
 		A337CF48281FCECF00CF0ABC /* ContactsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A337CF47281FCECF00CF0ABC /* ContactsTable.swift */; };
 		A337CF4C281FF5F100CF0ABC /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A337CF4B281FF5F100CF0ABC /* ContactCell.swift */; };
+		A337CF5E282075C900CF0ABC /* ContactDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A337CF5C282075C900CF0ABC /* ContactDB.xcdatamodeld */; };
+		A337CF61282077D900CF0ABC /* ContactModel+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A337CF5F282077D900CF0ABC /* ContactModel+CoreDataClass.swift */; };
+		A337CF62282077D900CF0ABC /* ContactModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A337CF60282077D900CF0ABC /* ContactModel+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +33,9 @@
 		A337CF45281FB82D00CF0ABC /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		A337CF47281FCECF00CF0ABC /* ContactsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTable.swift; sourceTree = "<group>"; };
 		A337CF4B281FF5F100CF0ABC /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
+		A337CF5D282075C900CF0ABC /* ContactModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContactModel.xcdatamodel; sourceTree = "<group>"; };
+		A337CF5F282077D900CF0ABC /* ContactModel+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContactModel+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A337CF60282077D900CF0ABC /* ContactModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContactModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +80,8 @@
 			isa = PBXGroup;
 			children = (
 				A337CF45281FB82D00CF0ABC /* Contact.swift */,
+				A337CF5F282077D900CF0ABC /* ContactModel+CoreDataClass.swift */,
+				A337CF60282077D900CF0ABC /* ContactModel+CoreDataProperties.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -104,6 +112,7 @@
 				A31D3A02281D0E4B003D356D /* SceneDelegate.swift */,
 				A31D3A09281D0E4D003D356D /* Assets.xcassets */,
 				A31D3A0E281D0E4D003D356D /* Info.plist */,
+				A337CF5C282075C900CF0ABC /* ContactDB.xcdatamodeld */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -177,9 +186,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A337CF61282077D900CF0ABC /* ContactModel+CoreDataClass.swift in Sources */,
 				A337CF4C281FF5F100CF0ABC /* ContactCell.swift in Sources */,
 				A337CF46281FB82D00CF0ABC /* Contact.swift in Sources */,
 				A31D3A1E281D40EE003D356D /* TaskTableViewController.swift in Sources */,
+				A337CF62282077D900CF0ABC /* ContactModel+CoreDataProperties.swift in Sources */,
+				A337CF5E282075C900CF0ABC /* ContactDB.xcdatamodeld in Sources */,
 				A31D3A01281D0E4B003D356D /* AppDelegate.swift in Sources */,
 				A337CF48281FCECF00CF0ABC /* ContactsTable.swift in Sources */,
 				A31D3A03281D0E4B003D356D /* SceneDelegate.swift in Sources */,
@@ -381,6 +393,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		A337CF5C282075C900CF0ABC /* ContactDB.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A337CF5D282075C900CF0ABC /* ContactModel.xcdatamodel */,
+			);
+			currentVersion = A337CF5D282075C900CF0ABC /* ContactModel.xcdatamodel */;
+			path = ContactDB.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = A31D39F5281D0E4B003D356D /* Project object */;
 }

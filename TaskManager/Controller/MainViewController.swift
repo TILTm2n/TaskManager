@@ -14,15 +14,19 @@ class MainViewController: UIViewController {
         NSAttributedString.Key.font: UIFont(name: "Georgia-Bold", size: 30)!
     ]
     
-    var contactTable: UITableView = UITableView(frame: .zero, style: .plain)
+    var contactTable: UITableView = ContactsTable(frame: .zero, style: .plain)
     
-    private var contacts = [ContactProtocol]()
+    private var contacts: [ContactProtocol] = [] {
+        didSet {
+            contacts.sort{ $0.title < $1.title }
+        }
+    }
     
     private func loadContacts() {
-        contacts.append(Contact(title: "Варя", phone: "+7(910)-766-76-10"))
         contacts.append(Contact(title: "Аня", phone: "+7(978)-766-76-09"))
-        contacts.append(Contact(title: "Арина", phone: "+7(982)-766-76-08"))
         contacts.append(Contact(title: "Оля", phone: "+7(954)-766-76-07"))
+        contacts.append(Contact(title: "Варя", phone: "+7(910)-766-76-10"))
+        contacts.append(Contact(title: "Арина", phone: "+7(982)-766-76-08"))
     }
     private func configure(cell: inout UITableViewCell, for indexPath: IndexPath) {
         var configuration = cell.defaultContentConfiguration()
@@ -33,18 +37,43 @@ class MainViewController: UIViewController {
     
     func constraints() {
         NSLayoutConstraint.activate([
+            contactTable.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
             contactTable.widthAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.widthAnchor),
-            contactTable.heightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.heightAnchor),
             contactTable.centerXAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor),
-            contactTable.centerYAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerYAnchor),
+            contactTable.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
         ])
+    }
+    
+    @objc func addContact() {
+        let createAlert = UIAlertController(title: "New contact", message: "Add new contact", preferredStyle: .alert)
+        
+        createAlert.addTextField { nameTextField in
+            nameTextField.text = "Имя"
+        }
+        createAlert.addTextField { phoneTextField in
+            phoneTextField.text = "Номер телефона"
+        }
+        
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let addButton = UIAlertAction(title: "Добавить", style: .default) { _ in
+            guard let contactName = createAlert.textFields?[0].text,
+                  let contactPhone = createAlert.textFields?[1].text else {
+                return
+            }
+            let contact = Contact(title: contactName, phone: contactPhone)
+            
+            self.contacts.append(contact)
+            self.contactTable.reloadData()
+        }
+        
+        createAlert.addAction(cancelButton)
+        createAlert.addAction(addButton)
+        
+        self.present(createAlert, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        contactTable.translatesAutoresizingMaskIntoConstraints = false
-        contactTable.register(ContactCell.self, forCellReuseIdentifier: ContactCell.identifier)
         
         self.view.addSubview(contactTable)
         self.contactTable.delegate = self
@@ -54,7 +83,7 @@ class MainViewController: UIViewController {
         constraints()
         
         navigationItem.title = "Task Manager"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addContact))
         navigationController?.navigationBar.backgroundColor = .blue
         navigationController?.navigationBar.titleTextAttributes = attrs
         
