@@ -9,31 +9,14 @@ import UIKit
 
 class MainViewController: UIViewController {
 
+    var Contacts = [ContactModel]()
+    var contactTable: UITableView = ContactsTable(frame: .zero, style: .plain)
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let attrs = [
         NSAttributedString.Key.foregroundColor: UIColor.systemYellow,
         NSAttributedString.Key.font: UIFont(name: "Georgia-Bold", size: 30)!
     ]
-    
-    var contactTable: UITableView = ContactsTable(frame: .zero, style: .plain)
-    
-    private var contacts: [ContactProtocol] = [] {
-        didSet {
-            contacts.sort{ $0.title < $1.title }
-        }
-    }
-    
-    private func loadContacts() {
-        contacts.append(Contact(title: "Аня", phone: "+7(978)-766-76-09"))
-        contacts.append(Contact(title: "Оля", phone: "+7(954)-766-76-07"))
-        contacts.append(Contact(title: "Варя", phone: "+7(910)-766-76-10"))
-        contacts.append(Contact(title: "Арина", phone: "+7(982)-766-76-08"))
-    }
-    private func configure(cell: inout UITableViewCell, for indexPath: IndexPath) {
-        var configuration = cell.defaultContentConfiguration()
-        configuration.text = contacts[indexPath.row].title
-        configuration.secondaryText = contacts[indexPath.row].phone
-        cell.contentConfiguration = configuration
-    }
     
     func constraints() {
         NSLayoutConstraint.activate([
@@ -44,6 +27,19 @@ class MainViewController: UIViewController {
         ])
     }
     
+    @objc func getAllContacts() {
+        do {
+            let contacts = try self.context.fetch(ContactModel.fetchRequest())
+            self.Contacts = contacts
+            self.contactTable.reloadData()
+        } catch let error {
+            let errorAlert = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
+            let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            errorAlert.addAction(cancelButton)
+            self.present(errorAlert, animated: true, completion: nil)
+        }
+        
+    }
     @objc func addContact() {
         let createAlert = UIAlertController(title: "New contact", message: "Add new contact", preferredStyle: .alert)
         
@@ -60,16 +56,79 @@ class MainViewController: UIViewController {
                   let contactPhone = createAlert.textFields?[1].text else {
                 return
             }
-            let contact = Contact(title: contactName, phone: contactPhone)
             
-            self.contacts.append(contact)
-            self.contactTable.reloadData()
+            let newContact = ContactModel(context: self.context)
+            newContact.name = contactName
+            newContact.phone = contactPhone
+            
+            do {
+                self.Contacts.append(newContact)
+                try self.context.save()
+                self.getAllContacts()
+            } catch let error {
+                let errorAlert = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
+                self.present(errorAlert, animated: true, completion: nil)
+            }
+            //self.Contacts.append(newContact)
         }
         
         createAlert.addAction(cancelButton)
         createAlert.addAction(addButton)
         
         self.present(createAlert, animated: true, completion: nil)
+        
+    }
+    @objc func updateContact(update contact: ContactModel) {
+        let createAlert = UIAlertController(title: "New contact", message: "Add new contact", preferredStyle: .alert)
+        
+        createAlert.addTextField { nameTextField in
+            nameTextField.text = contact.name
+        }
+        createAlert.addTextField { phoneTextField in
+            phoneTextField.text = contact.phone
+        }
+        
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let addButton = UIAlertAction(title: "Изменить", style: .default) { _ in
+            guard let updetedContactName = createAlert.textFields?[0].text,
+                  let updatedContactPhone = createAlert.textFields?[1].text else {
+                return
+            }
+            
+            contact.name = updetedContactName
+            contact.phone = updatedContactPhone
+            
+            do {
+                try self.context.save()
+                self.getAllContacts()
+            } catch let error {
+                let errorAlert = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
+                self.present(errorAlert, animated: true, completion: nil)
+            }
+        }
+        
+        createAlert.addAction(cancelButton)
+        createAlert.addAction(addButton)
+        
+        self.present(createAlert, animated: true, completion: nil)
+    }
+    @objc func deleteContact(delete contact: ContactModel) {
+        context.delete(contact)
+        
+        do {
+            try context.save()
+            self.getAllContacts()
+        } catch let error {
+            let errorAlert = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
+            present(errorAlert, animated: true)
+        }
+    }
+    
+    private func configure(cell: inout UITableViewCell, for indexPath: IndexPath) {
+        var configuration = cell.defaultContentConfiguration()
+        configuration.text = Contacts[indexPath.row].name
+        configuration.secondaryText = Contacts[indexPath.row].phone
+        cell.contentConfiguration = configuration
     }
     
     override func viewDidLoad() {
@@ -79,14 +138,13 @@ class MainViewController: UIViewController {
         self.contactTable.delegate = self
         self.contactTable.dataSource = self
         
-        loadContacts()
-        constraints()
-        
         navigationItem.title = "Task Manager"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addContact))
         navigationController?.navigationBar.backgroundColor = .blue
         navigationController?.navigationBar.titleTextAttributes = attrs
         
+        getAllContacts()
+        constraints()
     }
     
 }
@@ -94,7 +152,7 @@ class MainViewController: UIViewController {
 extension MainViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        contacts.count
+        Contacts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -113,11 +171,12 @@ extension MainViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let actionDelete = UIContextualAction(style: .destructive, title: "Delete") { _, _, _ in
-            self.contacts.remove(at: indexPath.row)
-            tableView.reloadData()
+            let contactToDelete = self.Contacts[indexPath.row]
+            self.deleteContact(delete: contactToDelete)
         }
         let actionEdit = UIContextualAction(style: .normal, title: "Edit") { _, _, _ in
-            
+            let contactToEdit = self.Contacts[indexPath.row]
+            self.updateContact(update: contactToEdit)
         }
         let actions = UISwipeActionsConfiguration(actions: [actionDelete, actionEdit])
         
