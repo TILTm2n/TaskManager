@@ -18,10 +18,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let mainVC = MainViewController()
         let navVC = NavController(rootViewController: mainVC)
+        let tabVC = UITabBarController()
+        
+        tabVC.setViewControllers([navVC], animated: true)
         
         window = UIWindow(windowScene: windowScene)
         window?.windowScene = windowScene
-        window?.rootViewController = navVC
+        window?.rootViewController = tabVC
         window?.makeKeyAndVisible()
     }
 
