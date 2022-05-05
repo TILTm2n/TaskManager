@@ -134,6 +134,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 1)
         self.view.addSubview(contactTable)
         self.contactTable.delegate = self
         self.contactTable.dataSource = self

@@ -16,11 +16,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        let mainVC = MainViewController()
-        let navVC = NavController(rootViewController: mainVC)
+        let ContactsVC = MainViewController()
+        let ContactsNavVC = NavController(rootViewController: ContactsVC)
+        let TasksVC = TaskViewController()
+        let TasksNavVC = TaskNavViewController(rootViewController: TasksVC)
         let tabVC = UITabBarController()
         
-        tabVC.setViewControllers([navVC], animated: true)
+        tabVC.setViewControllers([TasksNavVC ,ContactsNavVC], animated: true)
         
         window = UIWindow(windowScene: windowScene)
         window?.windowScene = windowScene
